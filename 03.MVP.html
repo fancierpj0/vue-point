@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MVP</title>
+</head>
+<body>
+
+<!--
+    v:视图 ->dom
+-->
+<div id="app">
+    <input id="input" type="text">
+    <button id="btn">提交</button>
+    <ul id="list">
+    </ul>
+</div>
+
+<script src="jquery-2.0.3.min.js"></script>
+<script>
+    function Page(){}
+
+    /*
+        P(presenter):控制器
+            视图层发出了一个事件交给控制器
+            控制器要么调用ajax获取一些数据
+            要么直接就根据业务逻辑操作dom
+    */
+
+    $.extend(Page.prototype, {
+      init: function () {
+        this.bindEvents();
+      }
+      , bindEvents: function () {
+        var btn = $('#btn');
+        btn.on('click', $.proxy(this.handleBtnClick, this))
+      }
+      , handleBtnClick: function () {
+        // alert('123');
+        var inputElem = $('#input');
+        var inputValue = inputElem.val();
+        var ulElem = $('#list');
+        ulElem.append('<li>' + inputValue + '</li>li>');
+        inputElem.val('');
+      }
+    });
+
+    var page = new Page();
+    page.init();
+</script>
+</body>
+</html>

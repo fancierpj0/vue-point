@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+                            <!-- 这里监听发emit为input的事件，emit传递的参数都会在这里被封装进监听函数的arguments中，第一个参数为arguments[0] -->
+    <!--<comp-one :value1="value" @input="value = arguments[0]"></comp-one>-->
+    <comp-one :value1="value" @change="value = arguments[0]"></comp-one>
+    <!-- 等同于上面 -->
+    <comp-one v-model="value"></comp-one>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+
+/*
+    So 组件中支持v-model
+    需要：
+    1. 在组件中接收input的value
+    2. 在子组件发射一个input事件，并带上<input>的值
+    3. 在<input>上绑定@input事件函数，设置value
+
+    可以通过model属性自定义v-model的触发事件和属性名
+*/
+  const component = {
+    model:{
+      //默认为value
+      prop:'value1'
+      //默认为input
+      ,event:'change'
+    },
+    // props:['value']
+    props:['value1']
+    ,template:`
+      <div>
+        <input type="text" @input="handleInput" :value="value1">
+      </div>
+    `
+    ,methods:{
+      handleInput(e){
+        // this.$emit('input',e.target.value)
+        this.$emit('change',e.target.value)
+      }
+    }
+  };
+
+  let vm = new Vue({
+    el:'#app'
+    ,components:{
+      CompOne:component
+    }
+    ,data:{
+      value:'123'
+    }
+  })
+</script>
+</body>
+</html>

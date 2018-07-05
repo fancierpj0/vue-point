@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./animate.css">
+    <style>
+        @keyframes bounce-in {
+            0% {
+                transform:scale(0);
+            }
+            50%{
+                transform: scale(1.5);
+            }
+            100%{
+                transform: scale(1);
+            }
+        }
+
+        .fade-enter-active{
+            transform-origin: left center;
+            animation:bounce-in 1s;
+        }
+
+        .fade-leave-active{
+            transform-origin: left center;
+            animation:bounce-in 1s reverse;
+        }
+    </style>
+</head>
+<body>
+
+<div id="root">
+    <transition
+            name="fade"
+            enter-active-class="animated swing"
+            leave-active-class="animated shake">
+        <div v-if="show">hello world</div>
+    </transition>
+
+    <button @click="handleClick">切换</button>
+</div>
+<script>
+  /*
+    可以通过enter-active-class等属性自定义动画的几个类名
+
+    So，也就方便我们使用animate.css这个库,这个库是基于@keyframes的
+  */
+
+  var vm = new Vue({
+    el:'#root'
+    ,data:{
+      show:true
+    }
+    ,methods:{
+      handleClick:function(){
+        this.show = !this.show;
+      }
+    }
+  })
+</script>
+</body>
+</html>

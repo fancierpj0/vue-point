@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .xxx{
+            color:red;
+        }
+    </style>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--<div @click="handleDivClick"-->
+            <!--:class="{xxx:isActivated}"-->
+            <!--:suibian="123"-->
+        <!--&gt;Hello world</div>-->
+
+        <div @click="handleDivClick"
+             :class="[activated,activatedOne]"
+             :suibian="123"
+        >Hello world</div>
+    </div>
+
+    <script>
+    /*
+        法一：class的对象绑定
+        :class="xxx:true||false"
+        xxx是类名
+        ，xxx冒号后面可以跟一个$data的属性
+        ，为true时激活该类名，为false时取消该类名
+        , 也可以直接跟一个bool值
+
+        法二：class的数组绑定，绑定多个类名
+        :class="[xx,yy]"
+
+
+    */
+
+      var vm = new Vue({
+        el: '#app'
+        ,data:{
+          isActivated:false
+          ,activated:""
+          ,activatedOne:"activatedOne-one"
+        }
+        , methods: {
+          // handleDivClick: function () {
+          //   this.isActivated = !this.isActivated;
+          // }
+          handleDivClick: function () {
+            this.activated === 'xxx' ? this.activated = ""
+              : this.activated = 'xxx';
+          }
+        }
+      });
+    </script>
+</body>
+</html>

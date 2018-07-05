@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+/*
+    继承时
+    属性(data)可以覆盖
+    想要覆盖props 需要用propsData
+    生命周期无法覆盖，并且由内而外触发
+
+*/
+
+  const component = {
+    props: {
+      active: Boolean
+      , propOne: String
+    },
+    template: `
+    <div>
+        <input type="text" v-model="text">
+        <span @click="handleChange">{{propOne}}</span>
+        <span v-show="active">see me if active</span>
+    </div>
+  `
+    , data() {
+      return {
+        text: 0
+      }
+    }
+    ,methods:{
+      handleChange(){
+        this.$emit('change')
+      }
+    }
+    ,mounted(){
+      console.log('comp mounted');
+    }
+  };
+
+  //根组件继承
+  const CompVue = Vue.extend(component);
+
+  //子组件可以继承
+  const component2 = {
+    extends:component
+    ,data(){
+      return {
+        text:'component2'
+      }
+    }
+  };
+
+  new CompVue({
+    el: '#app'
+
+    //向继承自的组件传递属性
+    , propsData: {
+      propOne: 'xxx'
+    }
+
+    //会覆盖继承自的组件的data
+    , data: {
+      text: '123'
+    }
+
+    , mounted() {
+      //继承自的组件的mounted会先被调用，然后这里才会被调用，不会被覆盖
+      console.log('instance mounted');
+    }
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<!--
+    指令
+        v-for
+        v-on:
+        v-model
+
+    数据双向绑定:
+        v-model会绑定vue实例下data中的一个属性
+        ，只要输入框里的数据改变，这个属性就会改变
+        ，反之这个属性的值改变，输入框里的数据显示也会发生改变
+-->
+
+    <div id="app">
+        <input type="text" v-model="inputValue">
+        <button v-on:click="handleBtnClick">提交</button>
+        <ul>
+            <li v-for="item in list">{{item}}</li>
+        </ul>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: '#app'
+        , data: {
+          list:[]
+          ,inputValue:''
+        }
+        ,methods:{
+          handleBtnClick:function(){
+            // alert('click');
+
+            //this会代理data里的属性
+            // ，this.inputValue值的就是this.$data.inputValue
+            this.list.push(this.inputValue);
+            this.inputValue = '';
+          }
+        }
+
+      });
+    </script>
+</body>
+</html>

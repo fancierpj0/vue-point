@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+
+  /*
+    el必须有
+    ，即使你在render中用createElement返回了一个虚拟dom
+    ，这是因为既没有el就会一直处于等待$mount(el)的情况
+    , 不会进入到render的声明周期
+
+    children可以是字符串,不需要使用数组，但如果是子组件需要用数组（即使只有一个child）
+
+    <slot name="xxx">在createElement中为this.$slots.xxx
+  */
+
+
+  const component = {
+    name:'comp',
+    // template:`
+    // <div :style="style">
+    //     <slot name="span"></slot>
+    //
+    // </div>
+    // `
+    render(h){
+      return h('div',{
+        style:this.style
+        ,on:{
+          click:()=>{this.$emit('click')}
+        }
+        ,domProps:{
+          innerHTML:`<span>innerHTML</span>`
+        }
+        ,attrs:{
+          id:'test-id'
+        }
+      },this.$slots.span)
+      // this.$slots.header
+    }
+
+    ,data(){
+      return {
+        style:{
+          width:'200px'
+          ,height:'200px'
+          ,border:'1px solid #aaa'
+        }
+      }
+    }
+  };
+
+  let vm = new Vue({
+    // template:`
+    // <comp-one ref="comp">
+    //     <span ref="span" slot="span">{{value}}</span>
+    // </comp-one>
+    // `,
+    el:'#app',
+    components:{
+      CompOne:component
+    }
+    ,data:{
+      value:'123'
+    }
+    ,methods:{
+      handleClick(){
+        alert('click');
+      }
+    }
+    ,render(h){
+      // return this.$createElement()
+      //this.$createElement等同于render接收的参数
+      console.log(this.value)
+      return h(
+        //name
+        'comp-one'
+        //props
+        ,{
+          ref:'comp'
+          // ,on:{
+          //   click:this.handleClick
+          // }
+          ,nativeOn:{
+            click:this.handleClick
+          }
+        },
+        //children
+        //字符串不需要使用数组，但如果是子组件需要用数组（即使只有一个child）
+        [
+          h('span',{ref:'span',slot:'span'},this.value)
+        ]
+      )
+    }
+  })
+</script>
+</body>
+</html>

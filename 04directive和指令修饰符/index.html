@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <div v-text="text"></div>
+
+    <input type="checkbox" v-model="active">
+
+    <div>
+        <!--
+            点击后会往arr里塞数据
+            ，注意：并不会清楚原本arr里的数据
+            ，另外arr里如果原先有数据，也不会使checkbox被选中
+            ，默认都是不选中
+         -->
+        <input type="checkbox" v-model="arr" :value="1">
+        <input type="checkbox" v-model="arr" :value="2">
+        <input type="checkbox" v-model="arr" :value="3">
+    </div>
+
+    <div>
+        <input type="radio" value="one" v-model="picked">
+        <input type="radio" value="two" v-model="picked">
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!--
+ === 11大指令 ===
+1.  v-bind
+
+ 2. v-on
+ 用在dom上 -> addEventListener
+ 用在组件 -> vm.$on
+
+ 3. v-text
+ 会忽略原本的innerText
+
+ 4. v-html
+
+ 5. v-model
+ 默认情况下只能用在input上
+
+ 6. v-show
+ display:'none'
+
+ 7. v-if
+ 节点存不存在
+ v-elseif
+ v-else
+
+ 8. v-for
+    in,of -> 都可遍历数组和对象
+    数组、对象
+    key index or id
+
+9. v-pre
+<pre></pre>
+
+10. v-cloack(斗篷)
+html加载 {{}} 这些 vue自带的模板语法 还没有被解析，会显示在浏览器上
+使用v-cloack后 会display:none 等解析加载完成才显示
+
+11. v-once
+不会被重新渲染
+
+=== 指令修饰符 ===
+v-model.number -> 让input接收的输入从字符串变为数字
+v-model.trim -> 去除首尾空格
+v-model.lazy -> 默认v-model绑定的事件为input 变成lazy后 会变成onchange事件(改变且失去焦点后才会触发)
+
+-->
+<script>
+  let vm = new Vue({
+    el:'#app'
+    ,data:{
+      text:0
+      ,active:false
+      ,html:`<span>this is html</span>`
+      ,arr:[]
+      ,picked:''
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>-->
+    <script src="../vue.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+</div>
+
+<script>
+  /*
+      11大属性
+      ，$data中的所有属性都会挂载到vue实例上
+      ，$options有一个render方法(同React.createElement)，可以更改(data更改无效)
+      +1 $route
+      +1 $store
+
+
+      7大方法
+      $watch()
+      $on()和$emit()
+      $forceUpdate()
+      $set()和$delete()
+      $nextTick()
+      $destroy()
+      $createElement()
+  */
+  const app = new Vue({
+    // el: '#root',
+
+    //template会被Vue代码编译为render函数(render(h)中的h)
+    //So，使用template比直接使用render函数的效率要低一些
+    template: '<div>{{text}} {{obj.a}}</div>'
+    , data: {
+      text: 'some word'
+      , obj: {}
+    }
+
+    //如果是在这里设置的watch，app被注销时会自动注销掉watch
+    //切换路由时，组件默认会被注销
+    , watch: {}
+
+  });
+
+  //1. 实例上的$mount方法等同于给实例的el属性赋值
+  app.$mount('#app');
+
+  //0.
+  app.text = '可以直接访问挂载在实例上的数据，并修改之';
+  app.text = 0;
+
+  //2. 实例上的data属性
+  //可以直接更改
+  console.log(app.$data);
+  // setInterval(() => {
+  //   console.log(1);
+  //   //可以直接访问挂载在实例上的某一个数据，并修改之
+  //   // app.text += 1;
+  //   // app.$options.data.text += 1; //无效
+  //   app.$data.text += 1;
+  // }, 1000);
+
+  //3.
+  console.log('app.$props:', app.$props);
+
+  //4. html节点的引用
+  console.log('app.$el:', app.$el);
+
+  //5.
+  //new Vue()时传递的配置和默认配置合并后的对象
+  //无法通过app.$options.data来更改数据
+  //可以通过this.$options.name访问到实例上设置的name属性(无法直接通过this.name访问到)
+  console.log('app.$options:', app.$options);
+
+  //下一次重新渲染组件时会调用
+  // app.$options.render = (h) => {
+  //   return h('div', {}, 'new render function');
+  // };
+
+  //6. Vue实例，根实例
+  console.log('app.$root:', app.$root);
+  console.log('app.$root === app:', app.$root === app);
+
+  //7. 所有直接孩子，同react this.props.children
+  console.log(app.$children);
+
+  //8. slot
+  console.log('app.$slots:', app.$slots);
+  console.log('app.$scopedSlots:', app.$scopedSlots);
+
+  //9. 组件内所有设置了ref属性的dom或则孩子组件的实例
+  console.log('app.$refs:', app.$refs);
+
+  //10. 用于判断是否是服务端渲染
+  console.log('app.$isServer:', app.$isServer);
+
+  //11. $parent 获取父组件的实例
+  console.log(this.$parent.$options.name);
+  //支持在子组件改变父组件的属性
+  this.$parent.text = 111;
+  //$parent也可改变，通过在new Vue的时候设置 parent属性
+  //，但如果是一个子组件是无法更改parent，只有在new Vue({})时可更改，即根实例时
+
+  // === 方法 ===
+
+  //1. $watch
+  //注意页面跳转时是否需要注销
+  const unWatch = app.$watch('text', (newText, oldText) => {
+    console.log(`newText:${newText},oldText:${oldText}`);
+  });
+  // setTimeout(function () {
+  //   unWatch();
+  // }, 3000);
+
+  //2. $on与$emit
+  //$on只会监听本实例的$emit
+  //，这也是【bus】的原理
+  //Vue.prototype.bus = new Vue();
+  //然后vue的实例都能通过原型链找到bus
+  app.$on('test1', (a, b) => {
+    console.log('emited params:', a, b);
+  });
+  app.$once('test2', () => {
+    console.log('$once只会被触发一次');
+  });
+  app.$emit('test1', 1, 2);
+
+  // setInterval(() => {
+  //   app.$emit('test1', 1, 2);
+  //   app.$emit('test2');
+  // }, 1000)
+
+  //3. $forceUpdate
+  // let i = 0;
+  // setInterval(() => {
+  //   //我们只在实例的data中给了一个obj={}
+  //   //,并没有声明a
+  //   //而又因为未声明的data.x.x不会触发重新渲染
+  //   //故这里是看不见html变化的(虽然已经赋上值了,但不会调用render)
+  //   // app.obj.a = i;
+  //
+  //   //so这里就轮到$forceUpdate()出场了
+  //   // app.$forceUpdate();
+  //
+  //   //4. 但最好使用$set追加要监听的属性
+  //   app.$set(app.obj, 'a', i);
+  //   i++;
+  // }, 1000);
+
+  //4. $delete
+  //直接 delete obj.x 会存在内存溢出
+  //，故请使用$delete
+
+  //5. $nextTick(cb)
+  //将回调延迟到下次DOM更新循环之后执行。在修改数据之后立即使用它，然后等待DOM更新。
+  //它根全局方法Vue.nextTick一样，不同的是回调的 this 自动绑定到调用它的实例
+  //2.1.0起，如果没有给一个cb，则返回一个promise。
+  //So，需要polyfill支持，Vue并不自带polyfill
+  setInterval(() => {
+    // app.text += 1;
+    // app.text += 1;
+    // app.text += 1;
+    // app.text += 1;
+    // app.text += 1;
+
+    //不会看见五次变化，只会看见一次性增加了5
+    //因为这是异步渲染
+    app.$nextTick(() => {
+      app.text += 1;
+    });
+    app.$nextTick(() => {
+      app.text += 1;
+    });
+    app.$nextTick(() => {
+      app.text += 1;
+    });
+    app.$nextTick(() => {
+      app.text += 1;
+    });
+    app.$nextTick(() => {
+      app.text += 1;
+    })
+    //nextTick也无效 //必须是dom节点？
+  }, 3000);
+
+  //6 $destroy 主动销毁 会帮助我们销毁所有事件监听和watch
+
+  //7 $createElement 同 render()接收的参数
+</script>
+</body>
+</html>

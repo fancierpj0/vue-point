@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--<div v-for="(item,index) of list"-->
+         <!--:key="index">-->
+        <!--{{item}} -&#45;&#45; {{index}}-->
+
+    <!--</div>-->
+
+    {{echo()}}
+
+    <!--<template v-for="(item,index) of list"-->
+         <!--:key="index">-->
+        <!--<div>{{item}} -&#45;&#45; {{index}}</div>-->
+        <!--<span>{{item.text}}</span>-->
+    <!--</template>-->
+
+    <div v-for="(item,key,inidex) of userInfo">
+        {{item}}
+    </div>
+</div>
+<script>
+/*
+    //case1
+    不推荐以index作为key值
+    ,一般以数据的id值作为key值
+
+    //case2
+    直接改变存在于$data里的某个数组属性
+    ，是不会重新渲染模板的
+    ，必须通过vue支持的7种数组的变异方法才会
+    => push pop shift unshift splice sort reverse
+
+    或则可以通过改变数组属性的引用
+    this.list = this.list.filter((item,i)=>i!==index);
+
+    ，再或则通过set方法向对象里注入数据 Vue.set(vm.userInfo,1,'hello')，其中第二个参数为数组里第几项，第三个参数为要替换成的数据
+    , 实例上也有这个方法 vm.$set(vm.userInfo,1,'hello');
+
+    //case3
+    template 等同于 React.Fragment
+    ，并且如果在其身上使用了v-for，相当于是对立面的每个标签设置了v-for
+
+    //case4
+    对象也可以用作循环材料(不论是of 还是 in)
+    ,并且比数组多一个key作为第二个参数传入(这里的for of 是vue自己封装的，不是es6的for of，故能遍历对象)
+
+    另外改变对象的值会重新渲染，但添加并不会，delete obj[attr] 也不会
+    ，解决办法是通过改变对象的引用
+    ，或则通过set方法向对象里注入数据 Vue.set(vm.userInfo,'location','chengdu')
+    , 实例上也有这个方法 vm.$set(vm.userInfo,'address','beijing');
+*/
+
+  var vm = new Vue({
+    el:'#app'
+    ,data:{
+      list:['hello','dell','nice','to','meet','you']
+      ,userInfo:{
+        name:'Dell'
+        ,age:28
+        ,gender:'male'
+        ,salary:'secret'
+      }
+    }
+    ,methods:{
+      echo:function(){
+        console.log('执行一次');
+        return 'echo';
+      }
+    }
+  });
+
+</script>
+</body>
+</html>

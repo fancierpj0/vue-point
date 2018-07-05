@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <child content="Dell"></child>
+        <child content="Lee"></child>
+    </div>
+    <script>
+    /*
+        非父子组件传值：
+            1. 爷孙传值
+            2. 表亲传值
+
+        通过bus（总线/发布订阅模式/观察者模式）来解决非父子组件传值
+
+        bus就是一个简单的vue实例，将它赋值给Vue的原型
+
+        $emit,$on
+        需要注意的是$emit一个事件,那么所有监听了这个事件的组件都会执行对应的监听函数
+     */
+
+    Vue.prototype.bus = new Vue();
+
+    Vue.component('child', {
+      props:{
+        content:String
+      }
+      ,data:function(){
+        return {
+          selfContent:this.content
+        }
+      }
+      ,template: '<div @click="handleClick">{{content}}</div>'
+      ,methods:{
+        handleClick:function(){
+          //因为this.bus是Vue的实例，故也有$emit方法
+          this.bus.$emit('change', this.content);
+        }
+      }
+      ,mounted:function(){
+        var self = this;
+        this.bus.$on('change', function (msg) {
+            self.selfContent = msg;
+        });
+      }
+    });
+
+    var vm = new Vue({
+      el: '#root'
+    });
+    </script>
+</body>
+</html>

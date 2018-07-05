@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<!--
+    指令
+        v-for
+        v-on:
+        v-model
+
+    数据双向绑定:
+        v-model会绑定vue实例下data中的一个属性
+        ，只要输入框里的数据改变，这个属性就会改变
+        ，反之这个属性的值改变，输入框里的数据显示也会发生改变
+-->
+
+<div id="app">
+    <input type="text" v-model="inputValue">
+    <button v-on:click="handleBtnClick">提交</button>
+    <ul>
+        <todo-item v-bind:content="item" v-for="item in list"></todo-item>
+    </ul>
+</div>
+
+<script>
+/*
+    创建全局组件
+    大驼峰命名的组件 在使用时使用串烧形式
+
+    v-bind：传递属性给组件
+*/
+  // Vue.component('TodoItem', {
+  //   props:['content']
+  //   ,template:'<li>{{content}}</li>'
+  // });
+
+    /*
+        如果使用的是局部组件
+        ，需要注册
+    */
+    var TodoItem = {
+      props: ['content']
+      , template: '<li>{{content}}</li>'
+    };
+
+  var app = new Vue({
+    el: '#app'
+    ,components:{
+      TodoItem
+    }
+    , data: {
+      list:[]
+      ,inputValue:''
+    }
+    ,methods:{
+      handleBtnClick:function(){
+        // alert('click');
+
+        //this会代理data里的属性
+        // ，this.inputValue值的就是this.$data.inputValue
+        this.list.push(this.inputValue);
+        this.inputValue = '';
+      }
+    }
+
+  });
+</script>
+</body>
+</html>

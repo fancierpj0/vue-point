@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    {{fullName}}
+</div>
+
+<script>
+    var vm = new Vue({
+      el:'#app'
+      ,data:{
+        firstName:'Dell'
+        ,lastName:'Lee'
+      }
+      ,computed:{
+        // fullName:function(){
+        //   return this.firstName + ' ' + this.lastName;
+        // }
+        fullName:{
+          //获取时执行
+          get:function(){
+            return this.firstName + ' ' + this.lastName;
+          }
+          //设置时执行
+          ,set:function(value){
+            // console.log(value);
+            var arr = value.split(' ');
+            this.firstName = arr[0];
+            this.lastName = arr[1];
+          }
+        }
+      }
+
+    })
+</script>
+</body>
+</html>

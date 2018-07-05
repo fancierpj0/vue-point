@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+    <style>
+        /* 第一阶段时添加，开始动画时被X掉(即第二阶段) */
+        /* 需要注意的是，从display:none切换到display:block时，transition指定的属性的动画们都会失去动效 */
+        .fade-enter{
+            opacity: 0;
+        }
+
+        /* 第一阶时被添加，动画结束后被X掉 */
+        .fade-enter-active{
+            transition:opacity 3s;
+        }
+
+        /* === === === === === === */
+
+        .fade-leave-to{
+            opacity: 0;
+        }
+
+        .fade-leave-active{
+            transition:opacity 3s;
+        }
+    </style>
+</head>
+<body>
+
+<div id="root">
+    <transition name="fade">
+        <div v-if="show">hello world</div>
+    </transition>
+
+    <button @click="handleClick">切换</button>
+</div>
+<script>
+/*
+    被transition包裹的元素，Vue会自动分析一下元素的css样式，然后构建一个动画的流程
+
+    === 显示动画 ===
+
+    在动画即将执行的一瞬间，vue会往元素身上【增】加【两】个类名:
+    fade-enter
+    fade-enter-active
+
+    当动画第一帧结束后
+    ，vue会在动画运行到第二帧的时候，干两件事
+    ，把fade-enter【去】掉
+    ，【增】加一个fade-enter-to
+
+    当动画运行结束时
+    ，会把fade-enter-active
+    ,fade-enter-to
+    【都去】掉
+
+    样式名的前缀必须和name指定的前缀一样，默认不给是name="v"
+
+    === 隐藏动画 ===
+    fade-leave,fade-leave-active
+
+    X fade-leave
+    + fade-leave-to
+
+    X fade-leave-active
+    X fade-leave-to
+*/
+
+  var vm = new Vue({
+      el:'#root'
+      ,data:{
+        show:true
+      }
+      ,methods:{
+        handleClick:function(){
+          this.show = !this.show;
+        }
+      }
+    })
+</script>
+</body>
+</html>

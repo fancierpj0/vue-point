@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="root">
+    <counter :count="0" @inc="handleIncrease"></counter>
+    <counter :count="0" @inc="handleIncrease"></counter>
+    <div>{{total}}</div>
+</div>
+
+<script>
+/*
+    v-bind: 里的0,1...是数字类型
+
+    1. Vue不推荐子组件直接修改父组件传递过来的数据（虽然也有效果）
+    ,因为有可能接收的是一个引用类型的数据，而这数据可能被其它子组件引用
+    ,So你可以将父组件传递过来的属性交给子组件自己的data来管理，它会copy一份拿来自己用
+*/
+
+  var counter = {
+    props:['count']
+    ,data:function(){
+      return {
+        number:this.count
+      }
+    }
+    ,template:'<div @click="handleClick">{{number}}</div>'
+    ,methods:{
+      handleClick:function(){
+        this.number++;
+        // this.$emit('change',2,1,...);
+        this.$emit('inc', 1); //告诉父组件自增1
+      }
+    }
+  };
+  var vm = new Vue({
+    el:'#root'
+    ,data:{
+      total:0
+    }
+    ,components:{
+      counter
+    }
+    ,methods:{
+      handleIncrease:function(step){
+        this.total += step;
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+  /*
+     十三大生命周期函数
+
+      不指定el(通过template生成模板)，是不会触发beforeMount和mounted
+
+      创建 挂载(使用template或服务端渲染不会触发) 更新 路由切换 销毁
+
+      beforeCreate时候reactivity还没好，So不要在beforeCreate时修改数据，ajax等请求最早要放在created里做
+
+      .vue文件里的template会被vue-loader处理，变成一个render函数(h)
+  */
+
+  let vm = new Vue({
+    el:'#app'
+    ,data:{
+      text:'aaa'
+    }
+    //
+    ,beforeCreate(){
+      console.log(this.$el,'beforeCreate')
+      //undefined
+    }
+    ,created(){
+      console.log(this.$el,'created')
+      //undefined
+    }
+
+    //有无el?(有无template?将template编译成render函数:将el挂载的html作为模板进行编译):等待$mount →↑ 有无template
+
+    ,beforeMount(){
+      console.log(this.$el,'beforeMount')
+      //未被替换时的dom节点
+    }
+
+    //创建dom并挂载到this.$el上
+    ,render(h){
+      throw new TypeError('render error')
+
+      //h同React.createElement
+      //第二个参数为属性
+      return h('div',{},this.text)
+    }
+
+    ,mounted(){
+      console.log(this.$el,'mounted')
+      //被模板替换后的dom节点
+
+    }
+
+    //运行时
+    ,beforeUpdate(){
+      console.log(this,'beforeUpdate')
+    }
+    ,updated(){
+      console.log(this,'updated')
+    }
+    ,activated(){
+      console.log(this,'activated')
+    }
+    ,deactivated(){
+      console.log(this,'deactivated')
+    }
+
+    //当vm.$destroy()被调用
+    ,beforeDestroy(){
+      console.log(this,'beforeDestroy')
+    }
+    ,destroyed(){
+      console.log(this,'destroyed')
+    }
+
+    //调试render错误，开发用
+    //本组件才会捕获，不会捕获子组件
+    ,renderError(h,err){
+      return h('div', {}, err.stack);
+    }
+
+    //用于上线时收集错误
+    //可以捕获子组件错误，一般用于根组件
+    ,errorCaptured(h,err){
+      //会向上冒泡
+    }
+  })
+</script>
+</body>
+</html>

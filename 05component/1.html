@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <comp></comp>
+    <comp-one :active="isActive"></comp-one>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+/*
+ 组件命名为大驼峰
+ 引用组件时为串烧
+*/
+
+
+  const component = {
+    //父组件传递的属性必须要在这里声明的才会被接收
+    //接收变量时，如果是一个串烧的属性，需要使用串烧的形式来接收
+    props:{
+      active:Boolean
+      ,propsOne:{
+        type:String
+        // ,required:true
+        // ,default:'222'
+        //如果default是指定了一个对象，需要返回一个方法
+        ,default(){
+          return {a:'1'}
+        }
+      }
+      ,other:{
+        type:String
+        ,validator(value){
+          return value === '@@@';
+        }
+      }
+    }
+    // props:['active','propsOne']
+    ,template:`
+        <div>This is component - {{active}}</div>
+    `
+    //组件中的data必须是一个函数，然后反应会一个对象
+    ,data(){
+      return {
+        text:'123'
+      }
+    }
+    ,mounted(){
+      //不能直接修改父组件传递过来的属性，会报一个警告
+      this.propOne = 'inner content';
+    }
+  };
+
+  //注册成全局组件
+  Vue.component('Comp', component);
+
+let vm = new Vue({
+  el: '#app'
+  ,data:{
+    isActive:true
+  }
+  //注册成局部组件
+  ,components:{
+    CompOne:component
+  }
+});
+
+
+console.log({'a-b':1,'a-c':2})
+</script>
+</body>
+</html>

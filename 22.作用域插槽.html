@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <child>
+            <template slot-scope="suibian">
+                <li>{{suibian.xx}}</li>
+            </template>
+        </child>
+    </div>
+
+    <script>
+/*
+    <template slot-scope="subian"><li>{{subian.xx}}</li></template>
+
+    其中xx是子组件模板中<slot> v-bind的的属性，这个属性会被挂载到slot-scope生成的属性对象下
+*/
+Vue.component('child', {
+  data: function () {
+    return {
+      list: [1, 2, 3, 4]
+    }
+  }
+  , template: `
+            <div>
+                <ul>
+                    <!--<li v-for="item of list">{{item}}</li>-->
+                    <slot
+                        v-for="item of list"
+                        :xx="item"
+                    ></slot>
+                </ul>
+            </div>
+          `
+});
+
+var vm = new Vue({
+  el: '#root'
+});
+    </script>
+</body>
+</html>

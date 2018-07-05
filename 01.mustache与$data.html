@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>-->
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{content}}
+    </div>
+
+    <div>{{content}}</div>
+
+    <script>
+      // var dom = document.getElementById('app');
+      // dom.innerHTML = 'hello world';
+
+      // setTimeout(function () {
+      //   dom.innerHTML = 'bye world';
+      // }, 2000);
+
+      var app = new Vue({
+        //el:定义让vue实例接管的范围
+        el:'#app'
+
+        //data:定义一些数据
+        ,data:{
+          content:'hello world'
+        }
+      });
+
+      console.log('app:', app);
+      //$data就是data:{}的别名
+      setTimeout(function () {
+        app.$data.content = 'bye world';
+      }, 2000);
+    </script>
+</body>
+</html>

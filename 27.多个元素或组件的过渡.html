@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+    <style>
+        .v-enter,.v-leave-to{
+            opacity:0;
+        }
+        .v-enter-active,.v-leave-active{
+            transition:opacity 1s;
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <transition
+        mode="out-in"
+    >
+        <!--<div v-if="show" key="a">Hello World</div>-->
+        <!--<div v-else key="b">Bye World</div>-->
+
+        <!--<child v-if="show"></child>-->
+        <!--<child-one v-else></child-one>-->
+
+        <li :is="type"></li>
+    </transition>
+    <button @click="handleClick">toggle</button>
+</div>
+<script>
+  /*
+    if,else 条件渲染的组价必须要有key，不然会复用导致动画无效
+
+    mode="in-out" 多个元素切换时，会先进入 再隐藏
+    mode="out-in" 多个元素切换时，会先隐藏 再进入
+
+    多组件动画也可以像if,else条件渲染一样配置
+    除此之外多组件动画，还支持动态渲染的形式
+    <component :is="type"></component>
+    ,注意动态组件不一定叫component，div也行，只要有:is
+  */
+  Vue.component('child',{
+    template:'<div>child</div>'
+  });
+  Vue.component('child-one',{
+    template:'<div>child-one</div>'
+  });
+
+  var vm = new Vue({
+    el:'#root'
+    ,data:{
+      show:true
+      ,type:'child'
+    }
+    ,methods:{
+      handleClick:function(){
+        this.show = !this.show;
+        this.type = this.type === 'child' ? 'child-one' : 'child';
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+    <link rel="stylesheet" href="./animate.css">
+    <style>
+        .fade-enter,.fade-leave-to{
+            opacity:0;
+        }
+        .fade-enter-active,.fade-leave-active{transition:opacity 3s}
+    </style>
+</head>
+<body>
+
+<div id="root">
+    <transition
+            name="fade"
+            appear
+            enter-active-class="animated swing fade-enter-active"
+            leave-active-class="animated shake fade-leave-active"
+            appear-active-class="animated bounce"
+    >
+        <div v-if="show">hello world</div>
+    </transition>
+
+    <button @click="handleClick">切换</button>
+</div>
+<script>
+  /*
+    使用animate.css有一个问题是，第一次刷新页面进来的时候
+    ，并没有动画
+
+    要解决这个问题需要给transition组件设置一个appear属性(固定写法)
+    ,嗯，这样既可
+    ，它会自动调用enter-active-class
+    , 你如果你不希望它调用enter-active-class对应的动画
+    ，你可以使用appear-active-class 再自定义 appear时显示的动画
+
+
+
+    transition和@keyframes(animate.css)动画可以混用
+    ,需要注意的是animate.css动画默认动画时间是1s
+    ,so存在transition动画持续时间和animate不一样的情况
+    ，那么Vue此时以哪个事件作为<Transition>的持续时间呢？
+
+    ，so我们可以给transition 指定一个 type="transition"
+    , 这样transition的时间就一定会按照transition设置的走
+    ,但此时会让appear失效
+
+    So推荐给transition组件使用 :duration="2000"
+    ，这样transition的时间就一定会按照duration设置的走
+    , 还可以这样分别设置出入场动画的持续时间
+    :duration={enter:5000,leave:3000}
+
+    以上，需要注意一点，不论是duration还是type=
+    ，animate设置的animate的动画的持续时间并不会受其影响
+  */
+
+  var vm = new Vue({
+    el:'#root'
+    ,data:{
+      show:true
+    }
+    ,methods:{
+      handleClick:function(){
+        this.show = !this.show;
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+    <script src="./velocity.js"></script>
+</head>
+<body>
+    <div id="root">
+        <transition
+            name="fade"
+            @before-enter="handleBeforeEnter"
+            @enter="handleEnter"
+            @after-enter="handleAfterEnter"
+        >
+            <div v-show="show">Hello World</div>
+        </transition>
+        <button @click="handleClick">toggle</button>
+    </div>
+    <script>
+/*
+    @before-enter:真正开始运行动画之前
+    @enter:开始运行动画
+    @after-enter:调用done()后触发
+
+    @before-leave,@leave,@after-leave
+*/
+        var vm = new Vue({
+          el:'#root'
+          ,data:{
+            show:true
+          }
+          ,methods:{
+            handleClick:function(){
+              this.show = !this.show;
+            }
+
+            // ,handleBeforeEnter:function(el){
+            //   console.log('before-enter');
+            //   el.style.color = 'red';
+            // }
+            // ,handleEnter:function(el,done){
+            //   setTimeout(() => {
+            //     el.style.color = 'green';
+            //     // done(); //告诉vue动画已经执行完毕
+            //   }, 2000);
+            //   setTimeout(()=>{
+            //     done();
+            //   },4000)
+            // }
+            // ,handleAfterEnter:function(el){
+            //   el.style.color = '#000'
+            // }
+
+            ,handleBeforeEnter:function(el){
+              el.style.opacity = 0;
+            }
+            ,handleEnter:function(el,done){
+              //Velocity动画执行完后，会执行complete指定的回调
+              Velocity(el,{opacity:1},{duration:1000,complete:done})
+            }
+            ,handleAfterEnter:function(el){
+              console.log('handleAfterEnter');
+            }
+          }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--<div :style="styleObj"-->
+            <!--@click="handleDivClick"-->
+        <!--&gt;-->
+            <!--Hello World-->
+        <!--</div>-->
+
+        <div :style="[styleObj,{fontSize:'30px'}]"
+             @click="handleDivClick"
+        >
+            Hello World
+        </div>
+    </div>
+
+    <script>
+        /*
+            style同原生的style是行内式
+        */
+        var vm = new Vue({
+          el:'#app'
+          ,data:{
+            styleObj:{
+              color:"#000"
+            }
+          }
+          ,methods:{
+            handleDivClick:function(){
+              this.styleObj.color = this.styleObj.color === '#000' ? 'red'
+                : '#000';
+            }
+          }
+        })
+    </script>
+</body>
+</html>

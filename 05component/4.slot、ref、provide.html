@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <comp-one>
+        <span slot="header">this is header</span>
+        <span slot="body">this is content</span>
+
+        <!-- 这个value是当前组件的value，而不会是comp-one里的value -->
+        <!-- 但如果使用了slot-scope，就可以获取到组件里的slot上定义的属性,比如这里在组件内部的slot上定义了一个value属性 -->
+        <span slot="mustache" slot-scope="props">{{props.value}}</span>
+
+
+    </comp-one>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+
+  /*
+    === 插槽 ===
+    <slot>就相当于React中的{this.props.children}
+
+    默认所有children都会放到slot所处的位置
+
+    若想某个组件放到某个地方 请使用具名插槽
+
+    === 作用域插槽 ===
+
+    === ref与$refs ==
+    用在dom上获取的是dom
+    用在组件上获取的是组件实例
+
+    === provide ===
+    //provide初始化的时候还没有this，如果需要，请使用函数的provide形式
+
+    //默认不支持reactive
+
+  */
+  const childComponent = {
+    template: '<div></div>'
+    // ,inject:['yeye','value']
+    ,inject:['yeye','data']
+    ,mounted(){
+      console.log('this.$parent.$options.name:',this.$parent.$options.name);
+      console.log('this.yeye:',this.yeye);
+      // console.log('this.value:',this.value);
+      console.log('this.data.value:',this.data.value);
+    }
+  };
+
+  const component = {
+    name:'comp',
+    components:{
+      ChildComponent:childComponent
+    },
+    template:`
+    <div :style="style">
+        <div>
+            <slot name="body"></slot>
+        </div>
+        <div>
+            <slot name="header"></slot>
+        </div>
+        <slot name="mustache" value="xxx"></slot>
+        <child-component></child-component>
+    </div>
+    `
+    ,data(){
+      return {
+        style:{
+          width:'200px'
+          ,height:'200px'
+          ,border:'1px solid #aaa'
+        }
+      }
+    }
+  };
+
+  let vm = new Vue({
+    el:'#app'
+    ,components:{
+      CompOne:component
+    }
+    ,data:{
+      value:'123'
+    }
+
+    // ,provide:{
+    //   yeye:this
+    //   ,value:this.value
+    // }
+    //provide初始化的时候还没有this
+    ,provide(){
+      const data = {};
+      Object.defineProperty(data, 'value', {
+        get: () => this.value
+        , enumerable: true
+      });
+
+      return{
+          yeye:this
+
+          //默认不支持reactive 获取的是一个快照，想要支持请像上面那样Object.defineProperty
+          // ,value:this.value
+
+         //Object.defineProperty这种比较hack，官方并不推荐
+         ,data
+      }
+    }
+  })
+</script>
+</body>
+</html>

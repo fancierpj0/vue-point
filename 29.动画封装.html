@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+    <style>
+        /* 第一阶段时添加，开始动画时被X掉(即第二阶段) */
+        /* 需要注意的是，从display:none切换到display:block时，transition指定的属性的动画们都会失去动效 */
+        /*.v-enter{*/
+            /*opacity: 0;*/
+        /*}*/
+
+        /* 第一阶时被添加，动画结束后被X掉 */
+        /*.v-enter-active{*/
+            /*transition:opacity 3s;*/
+        /*}*/
+
+        /* === === === === === === */
+
+        /*.v-leave-to{*/
+            /*opacity: 0;*/
+        /*}*/
+
+        /*.v-leave-active{*/
+            /*transition:opacity 3s;*/
+        /*}*/
+    </style>
+</head>
+<body>
+
+<div id="root">
+    <fade :show="show">
+        <div>hello world</div>
+    </fade>
+
+    <button @click="handleClick">切换</button>
+</div>
+<script>
+  /*
+    更推荐js封装
+    因为css封装时，styled是独立的，
+  */
+
+  Vue.component('fade', {
+    props: ['show']
+    // ,template:`
+    //     <transition>
+    //         <slot v-if="show"></slot>
+    //     </transition>
+    // `
+
+    , template: `
+        <transition @before-enter="handleBeforeEnter" @enter="handleEnter">
+            <slot v-if="show"></slot>
+        </transition>
+    `
+    , methods: {
+      handleBeforeEnter: function (el) {
+        el.style.color = 'red';
+      }
+      , handleEnter: function (er, done) {
+        setTimeout(() => {
+          el.style.color = 'green';
+          done();
+        }, 2000);
+      }
+    }
+  });
+  var vm = new Vue({
+    el:'#root'
+    ,data:{
+      show:true
+    }
+    ,methods:{
+      handleClick:function(){
+        this.show = !this.show;
+      }
+    }
+  })
+</script>
+</body>
+</html>

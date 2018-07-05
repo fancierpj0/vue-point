@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <!--<child @click="handleClick"></child>-->
+        <child @click.native="handleClick"></child>
+    </div>
+
+    <script>
+/*
+    handleChildClick->this.$emit('click');
+                        ↓
+                        @click=handleClick
+                        ↓
+                        父组件:handleClick方法
+
+    @click.native 添加.native后 监听的就是组件本身的事件，而不再是监听$emit再联系父组件的方法
+*/
+      Vue.component('child', {
+        template:'<div @click="handleChildClick">Child</div>'
+        ,methods:{
+          handleChildClick:function(){
+            alert('child click');
+            this.$emit('click');
+          }
+        }
+      });
+
+      var vm = new Vue({
+        el:'#root'
+        ,methods:{
+          handleClick:function(){
+            alert('click');
+          }
+        }
+      })
+    </script>
+</body>
+</html>

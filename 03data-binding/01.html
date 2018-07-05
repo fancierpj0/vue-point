@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--
+    this上的所有值
+    ，默认的js全局对象
+    ，都可以访问
+
+    但自定义的全局变量不行
+
+    渲染模板数据的四种方式:methods,computed,直接写表达式,watch
+-->
+
+var globalVar = '111' //eslint-disable-line
+
+<div id="app">
+    <!-- 必须要有结果，声明和赋值是不支持的,流程控制-->
+    {{isActive?'active':'not active'}}
+    {{arr.join('')}}
+    {{123}}
+    <!--{{globalVar}}-->
+
+    <!-- 绑定html -->
+    {{html}}
+    <div v-html="html"></div>
+
+
+    <!-- 绑定变量 -->
+    <div id="aaa">aaa</div>
+    <div v-bind:id="aaa">aaa</div>
+    <div :id="aaa">aaa</div>
+        <!-- class -->
+        <div class="abc"></div>
+            <!-- 对象形式 -->
+            <div :class="{active:isActive}">class</div>
+            <!-- 数组形式 -->
+            <div :class="[isActive?'active':'not-active',classVariable,{active:!isActive}]">class</div>
+        <!-- style,同class，并且会自动添加前缀 -->
+        <div :style="[styles1,styles2]">style</div>
+
+
+
+    <!-- 绑定事件 -->
+    <div v-on:click="handleClick">handleClick</div>
+    <div @click="handleClick">handleClick</div>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+  let vm = new Vue({
+    el:'#app'
+    ,data:{
+      isActive:false
+      ,arr:[1,2,3]
+      ,html:`<span>123</span>`
+      ,aaa:'main'
+      ,classVariable:'classVariable'
+      ,styles1:{color:'red',appearance:'none'}
+      ,styles2:{fontSize:'30px'}
+    }
+    ,methods:{
+      handleClick(){
+        alert('clicked');
+      }
+    }
+  })
+</script>
+</body>
+</html>

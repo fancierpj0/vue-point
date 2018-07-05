@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <!--<child content="<p>Dell</p>"></child>-->
+
+        <child>
+            <div class="header" slot="header">header</div>
+            <div class="footer" slot="footer">footer</div>
+        </child>
+    </div>
+
+    <script>
+  /*
+    因为{{}}只能渲染模板而不能渲染html
+    ，So如果我们想渲染父组件传递过来的模板
+    ，需要将子组件的模板中使用v-html
+
+    但此时外层的div是多余的
+    ，且此时并不能使用<template>
+    ,So 【插槽】就出现了！
+
+    1. slot插槽可以使用默认值，直接定义在 <slot>这里定义</slot> 内部即可
+    2. slot默认会展示组件内部插入的所有元素
+    ，So如果想在指定地点显示指定元素，可以使用具名插槽
+    ,具名插槽同样支持默认值
+   */
+      Vue.component('child', {
+        // template:'<div><p>{{content}}</p></div>'
+
+        // template:'<div><p>hello</p><div v-html="content"></div></div>'
+
+        // template:'<div><p>Hello</p><slot>默认内容</slot></div>'
+
+        template:`
+            <div>
+                <slot name="header"></slot>
+                <div><div class="content">content</div></div>
+                <slot name="footer"></slot>
+            </div>
+        `
+        ,props:['content']
+      });
+
+      var vm = new Vue({
+        el:'#root'
+      })
+    </script>
+</body>
+</html>

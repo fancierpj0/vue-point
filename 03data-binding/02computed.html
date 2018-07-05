@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <span>Name:{{name}}</span>
+    <span>{{getName()}}</span>
+    <span>Number:{{number}}</span>
+    <p><input type="text" v-model="number"></p>
+    <p>firstName:<input type="text" v-model="firstName"></p>
+    <p>lastName:<input type="text" v-model="lastName"></p>
+
+    <p>computed setName<input type="text" v-model="name"></p>
+
+    <p>FullName:{{fullName}}</p>
+
+    <input type="text" v-model="obj.a"/>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+  /*
+   getName()在组件由于其它数据重新渲染时，会被牵连无辜重新计算，So它是木有缓存的
+
+   而computed是有缓存的，只有当它依赖的数据发生改变时，才会重新计算
+
+   watch相较于computed的劣势在于显示数据时，如果数据由多个数据组成，那么就需要写n个监听
+
+   在computed和watch里尽量不要设置某个数据，防止出现infinite loop
+  */
+  let vm = new Vue({
+    el: '#app'
+    , data: {
+      firstName: 'Jokcy'
+      , lastName: 'Lou'
+      , number: 0
+      , fullName: ''
+      , obj: {
+        a: '123'
+      }
+    }
+    , computed: {
+      // name() {
+      //   console.log('new name');
+      //   return `${this.firstName} ${this.lastName}`;
+      // }
+
+      name: {
+        get() {
+          console.log('new name');
+          return `${this.firstName} ${this.lastName}`;
+        }
+        , set(name) {
+          const names = name.split(' ');
+          this.firstName = names[0];
+          this.lastName = names[1];
+        }
+      }
+    }
+    , methods: {
+      getName() {
+        return `${this.firstName} ${this.lastName}`;
+      }
+    }
+    , watch: {
+      // firstName(newName, oldName) {
+      //   this.fullName = newName + ' ' + this.lastName;
+      // }
+
+      firstName: {
+        handler(newName, oldName) {
+          this.fullName = newName + ' ' + this.lastName;
+        }
+        , immediate: true //绑定时就执行
+      }
+
+      ,obj: {
+        handler(newName, oldName) {
+          //除了immediate执行一次，后面即使用户改变数据也不会执行
+          console.log('obj.a changed')
+        }
+        , immediate: true //绑定时就执行
+        , deep:true //默认只会监听obj引用的变化,故如果要监听obj再往里深一层的某个属性，需置为true
+      }
+      //或则监听字符串形式的'obj.a'
+      // ,'obj.a':{
+      //   handler(newName, oldName) {
+      //     console.log('obj.a changed')
+      //   }
+      //   , immediate: true
+      // }
+
+    }
+  });
+</script>
+</body>
+</html>

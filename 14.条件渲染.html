@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <!--<div v-if="show" data-test="v-if">{{message}}</div>-->
+    <!--<div v-show="show" data-test="v-show" class="aaa">{{message}}</div>-->
+    <!--<div v-else>show为false，显示v-else</div>-->
+
+    <!--<div v-if="show === 'a'" data-test="v-if">This is A</div>-->
+    <!--<div v-else-if="show === 'b'">This is B</div>-->
+    <!--<div v-else>This is others</div>-->
+    
+    <div v-if="show">
+        用户名: <input key="username" type="text">
+    </div>
+    <div v-else>
+        邮箱名: <input key="password" type="text">
+    </div>
+</div>
+<script>
+/*
+    v-if：如果为false不是隐藏而是整个dom不存在
+    v-else：必须紧贴在if下面，不然会报错
+    v-if,v-else会复用元素，解决办法是使用独有的key值
+
+    v-show：底层是使用display:none
+*/
+  var vm = new Vue({
+    el:'#app'
+    ,data:{
+      show:false
+      ,message:'Hello World'
+    }
+  });
+</script>
+</body>
+</html>

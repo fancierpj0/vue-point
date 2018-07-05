@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{firstName+' '+lastName}}
+        <!--{{fullName}}-->
+        {{age}}
+        <!--{{fullName()}}-->
+        {{fullName}}
+    </div>
+
+    <script>
+    /*
+        === 将数据以文本形式渲染到页面 ===
+        法一
+        计算属性有一个缓存
+        ，意思是只要计算属性依赖的值没有改变
+        ，计算属性就不会重新计算（就是不会再调用一遍对应的计算属性的函数）
+
+        法二
+        另外在methods定义一个方法，然后在{{}}中调用也是可以达到同样的效果
+        ，但是没有缓存机制
+
+        法三
+        watch，同computed，也有缓存
+    */
+        var vm = new Vue({
+          el:'#app'
+          ,data:{
+            firstName:'Dell'
+            ,lastName:'Lee'
+            ,fullName:"Dell Lee"
+            ,age:28
+          }
+
+          //通过监听渲染数据
+          ,watch:{
+            firstName:function(){
+              console.log('监听到firstName发生改变')
+              this.fullName = this.firstName + " " + this.lastName;
+            }
+            ,lastName:function(){
+              console.log('监听到lastName发生改变')
+              this.fullName = this.firstName + " " + this.lastName;
+            }
+          }
+
+          //通过方法渲染数据
+          // ,methods:{
+          //   fullName:function(){
+          //     console.log('fullName方法运行一次');
+          //     return this.firstName + '' + this.lastName;
+          //   }
+          // }
+
+          //通过计算属性渲染数据
+          // ,computed:{
+          //   fullName:function(){
+          //     console.log('计算了一次');
+          //     return this.firstName + ' ' + this.lastName;
+          //   }
+          // }
+        })
+    </script>
+</body>
+</html>

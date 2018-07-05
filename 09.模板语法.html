@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+<div id="app">
+    {{name + ' Lee'}}
+    <div v-text="name + ' Lee'"></div>
+    <div v-html="name + ' Lee'"></div>
+</div>
+
+<script>
+/*
+    插值表达式 {{}}
+
+    v-text 只能插入文本，如果插入html会被转译 等同于{{}}
+
+    v-html 可以插入html
+
+    vue指令后面跟的值
+    ，不再是一个字符串
+    ，而是一个js表达式
+
+    v-on -> @
+    v-bind -> :
+*/
+
+  var vm = new Vue({
+    el:'#app'
+    ,data:{
+      name:'<b>Dell</b>'
+    }
+  });
+</script>
+</body>
+</html>

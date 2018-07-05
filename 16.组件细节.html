@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <table>
+            <tbody>
+                <!--<tr><td>1</td></tr>-->
+                <!--<tr><td>2</td></tr>-->
+                <!--<tr><td>3</td></tr>-->
+
+                <!--<row></row>-->
+                <!--<row></row>-->
+                <!--<row></row>-->
+
+                <tr is="row"></tr>
+                <tr is="row"></tr>
+                <tr is="row"></tr>
+            </tbody>
+        </table>
+
+        <div
+            ref="hello"
+            @click="handleClick"
+        >
+            hello world
+        </div>
+
+        <counter @change="handleChange" ref="one"></counter>
+        <counter @change="handleChange" ref="two"></counter>
+        <div>{{total}}</div>
+    </div>
+
+    <script>
+    /*
+        0. 组件在模板中使用，一般使用双标签的形式，不然多次使用，只会显示一个
+
+        1. 子组件必须放在一个根dom已经被接管的父元素中(el有挂载)
+
+        2. tbody里只能直接放tr，不然会跑到table外面去
+        解决办法是在tr上使用is，is后面绑定的是一个组件
+
+        类似的情况还有ul，li;select,option
+        <li is="row">，<option is="row">
+
+        3. 子组件的data必须是个function，由func返回一个对象，之所以这样设计，是因为子组件可能会被调用多次，而每个子组件都应该拥有一份数据而不是公用一份，So通过函数返回对象形成闭包来达到目的
+
+        4. ref如果加在标签上获取的是dom的引用，如果加载组件上获取的是组件的引用
+    */
+      Vue.component('row', {
+        data:function(){
+          return {
+            content:'this is content'
+          }
+        }
+        ,template: '<tr><td>{{content}}</td></tr>'
+      });
+
+    Vue.component('counter', {
+      template:'<div @click="count">{{number}}</div>'
+      ,data: function () {
+        return {
+          number: 0
+        }
+      }
+      ,methods:{
+        count:function(){
+          this.number++;
+          this.$emit('change');
+        }
+      }
+    });
+
+      var vm = new Vue({
+        el:'#root'
+        ,data:{
+          total:0
+        }
+        ,methods:{
+          handleClick:function(){
+            alert('click')
+            //this.$refs实例里的所有ref
+            console.log(this.$refs.hello)
+          }
+          ,handleChange:function(){
+            // alert('change');
+            this.total = this.$refs.one.number+this.$refs.two.number
+          }
+        }
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <child content="hello world" :number="123" one tree="123"></child>
+    </div>
+    <script>
+/*
+    不一定非要使用v-bind才能向子组件传递数据
+
+    如果使用了default，那么one这个属性不设置时（注意是不设置时，也就是连one这个key值都没），就会采用default设置的值
+
+    validator自定义校验器
+
+    props特性
+    ->子组件声明了父组件传递过来的那个属性
+    1. 在html标签上不会有属性显示
+    2. 在子组件可以可以通过{{}}取得属性的值
+
+    --- ---
+    非props特性
+    ->子组件【没有】声明父组件传递过来的那个属性
+    1. 在html标签上会显示该属性
+    2. 子组件不能使用{{}}取得属性的值
+*/
+
+      Vue.component('child', {
+        props: {
+          content:[String,Number]
+          ,number:Number
+          ,one:{
+            type:String
+            ,required:false
+            ,default:'default value'
+          }
+          ,two:{
+            type:String
+            ,validator:function(value){
+              return (value.length>5)
+            }
+          }
+        }
+        , template: '<div>{{one}}</div>'
+      });
+
+      var vm = new Vue({
+        el: '#root'
+      });
+    </script>
+</body>
+</html>

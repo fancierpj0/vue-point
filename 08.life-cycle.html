@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+
+    <script>
+    /*
+        == 8大生命周期函数 ===
+
+        生命周期函数就是vue实例在某一个时间点会自动执行的函数
+
+        - beforeCreate 事件和声明周期已经初始化完毕
+
+        - created 注入(injections)和双向绑定(reactivity)已经初始化完毕
+
+        - beforeMount 模板已经编译好，即将渲染
+            是否有el?
+                (是否有template属性?template的值会作为模板进行编译:会将<div id="app">...</div>这一坨当做模板进行编译)
+                : 当vm实例挂载el时被调用when vm.$mount(el) is called
+
+        - mounted 页面已经渲染好
+
+        == 其它的3个声明周期函数 ===
+        activated
+        deactivated
+        errorCaptured
+    */
+        var vm = new Vue({
+          el:'#app'
+          ,template:'<div>{{test}}</div>'
+          ,data:{
+            test:'hello world'
+          }
+          ,beforeCreate:function(){
+            console.log('beforeCreate');
+          }
+          ,created:function(){
+            console.log('created');
+          }
+          ,beforeMount:function(){
+            console.log('beforeMount');
+            console.log(this.$el);
+          }
+          ,mounted:function(){
+            console.log('mounted');
+            console.log(this.$el);
+          }
+
+          //vm.$destroy()调用时执行
+          ,beforeDestroy:function(){
+            console.log('beforeDestroy');
+          }
+          ,destroyed:function(){
+            console.log('destroyed');
+          }
+
+          //当数据发生改变时执行
+          ,beforeUpdate:function(){
+            console.log('beforeUpdate');
+          }
+          ,updated:function(){
+            console.log('updated');
+          }
+        })
+    </script>
+</body>
+</html>
