@@ -22,11 +22,15 @@
 
   /*
     === 插槽 ===
-    <slot>就相当于React中的{this.props.children}
+    <slot> 就相当于React中的{this.props.children}
 
-    默认所有children都会放到slot所处的位置
+    默认所有children都会放到组件中<slot>放置的位置
 
     若想某个组件放到某个地方 请使用具名插槽
+
+    另外this.$slots.default 能获得所有没有设置名字的slot 元素
+    ，$slots.xx 能获得名字设置为'xx'的slot元素
+    ，这方便在JSX中直接{this.$slotx.xx}使用
 
     === 作用域插槽 ===
 

@@ -189,6 +189,8 @@
   }, 3000);
 
   //6 $destroy 主动销毁 会帮助我们销毁所有事件监听和watch
+  //调用$destory后，vm内部dom绑定的事件啊，vm内定义的watch啊，什么的都会自动销毁
+  //但需要注意的是setInterval需要自己手动销毁
 
   //7 $createElement 同 render()接收的参数
 </script>
