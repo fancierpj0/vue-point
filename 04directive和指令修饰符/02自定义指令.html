@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <button v-color.13="flag">变色</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!--
+    binding:
+    - rawName:"v-color"
+    - name:"color"
+    - value:"red"
+    - modifiers:{
+        13:true
+    }
+    - expression:"flag3"
+
+    //应用
+    //拖拽指令
+    //focus指令
+-->
+<script>
+  let vm = new Vue({
+    el:'#app'
+    ,directives:{
+      //color 即是去掉 v- ,即binding里的 name （而不是rawName）
+      color(el,binding){ //el 指代的是button按钮
+        // console.log('arguments:',arguments);
+        el.style.background = binding.value;
+      }
+    }
+    ,data:{
+      flag:'red'
+    }
+  })
+</script>
+</body>
+</html>
